@@ -2,13 +2,13 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>BROADSIDE as Warhead: Extended Text RPG (Brute Force Fix)</title>
+  <title>BROADSIDE as Warhead: Extended Text RPG (Case-Insensitive Move & Take)</title>
   <style>
     body {
       background: #222;
       color: #eee;
       font-family: 'Courier New', Courier, monospace;
-      margin: 0; 
+      margin: 0;
       padding: 0;
     }
     #game-container {
@@ -69,18 +69,11 @@
   BROADSIDE as Warhead - Extended Text RPG
   ----------------------------------------
   This version covers the story from Warhead's Home to the final confrontation at Prota HQ.
-  1) Warhead's Home
-  2) Jane's Townhouse
-  3) ShareCar
-  4) Checkpoint
-  5) Broadside Arena
-  6) Slum Towers
-  7) Bubble Kitchen
-  8) Final Confrontation
 
-  Key Changes/Fixes:
-  - "take" command is case-insensitive.
-  - Talking to Zero in Slum Towers grants the 'bruteForce' item, so you can hack Marshals and overthrow Prota HQ.
+  FIXES & FEATURES:
+    - "take" command is case-insensitive.
+    - "move" command is case-insensitive for location names.
+    - Talking to Zero in Slum Towers grants "bruteForce," allowing you to hack Marshals/Prota HQ.
 
   Commands:
     - look
@@ -366,7 +359,7 @@ A stealth drone hovers above, shining a spotlight on you.`,
     ],
     exits: {
       move: {
-        // final area, no standard moves
+        // final area
       }
     }
   }
@@ -448,16 +441,29 @@ function lookAround() {
   print(msg);
 }
 
+// ---------------------------
+// CASE-INSENSITIVE "MOVE"
+// ---------------------------
 function tryMove(targetLocation) {
   const currentLocObj = locations[gameState.currentLocation];
-  if (!currentLocObj.exits ||
-      !currentLocObj.exits.move ||
-      !currentLocObj.exits.move[targetLocation]) {
+  if (!currentLocObj.exits || !currentLocObj.exits.move) {
     print(`You can't go to '${targetLocation}' from here.`);
     return;
   }
 
-  gameState.currentLocation = currentLocObj.exits.move[targetLocation];
+  // Convert targetLocation to lowercase to compare with keys
+  const exitsObj = currentLocObj.exits.move;
+  const normalizedTarget = Object.keys(exitsObj).find(
+    key => key.toLowerCase() === targetLocation.toLowerCase()
+  );
+
+  if (!normalizedTarget) {
+    print(`You can't go to '${targetLocation}' from here.`);
+    return;
+  }
+
+  // Proceed with the matched key
+  gameState.currentLocation = exitsObj[normalizedTarget];
   showLocation(gameState.currentLocation);
 }
 
@@ -472,7 +478,7 @@ function talkTo(targetName) {
   const line = npc.talk[Math.floor(Math.random() * npc.talk.length)];
   print(`${npc.name} says: "${line}"`);
 
-  // SPECIAL CASE: If it's Zero and we don't have bruteForce yet, give it
+  // If it's Zero and we don't have bruteForce, Zero gives it to us
   if (npc.name.toLowerCase() === "zero" && !gameState.inventory.includes("bruteForce")) {
     print("Zero hands you a datachip containing the 'bruteForce' script!");
     gameState.inventory.push("bruteForce");
@@ -722,7 +728,7 @@ document.getElementById("user-input").addEventListener("keypress", function(e) {
   }
 });
 
-// Start
+// Start the game
 initGame();
 </script>
 </body>
