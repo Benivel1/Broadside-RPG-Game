@@ -2,8 +2,19 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>BROADSIDE as Warhead — Extended Text RPG (All Images Added)</title>
+  <!-- Ensures proper rendering and touch zooming on mobile devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
+  <title>BROADSIDE as Warhead — Responsive Text RPG</title>
+  
   <style>
+    /* Basic Reset */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
     body {
       background: #222;
       color: #eee;
@@ -11,14 +22,18 @@
       margin: 0;
       padding: 0;
     }
+
+    /* Container for the entire game */
     #game-container {
-      width: 80%;
-      max-width: 850px;
-      margin: 2em auto;
+      width: 90%;
+      max-width: 900px;  /* For larger desktops */
+      margin: 1em auto;
       background: #333;
       padding: 1em;
       border-radius: 4px;
     }
+    
+    /* Output area for text */
     #output {
       height: 400px;
       overflow-y: auto;
@@ -28,11 +43,17 @@
       border-radius: 4px;
       white-space: pre-wrap;
       line-height: 1.4;
+      font-size: 1em;
     }
+    
+    /* Input area for commands */
     #input-area {
       display: flex;
       gap: 0.5em;
+      margin-bottom: 1em;
     }
+    
+    /* Responsive text input */
     #user-input {
       flex: 1;
       padding: 0.5em;
@@ -40,6 +61,7 @@
       border: none;
       border-radius: 4px;
     }
+    
     #submit-btn {
       padding: 0.5em 1em;
       font-size: 1em;
@@ -52,19 +74,35 @@
     #submit-btn:hover {
       background: #666;
     }
+
+    /* Images for scenes, intros, etc. */
     .scene-image,
     .intro-image,
     .victory-image {
       display: block;
       margin-top: 1em;
       max-width: 100%;
+      height: auto;
       border: 2px solid #fff;
+    }
+
+    /* Smaller screens: reduce height of output area to fit better */
+    @media (max-width: 600px) {
+      #output {
+        height: 300px;  /* shorter for mobile so the keyboard won't obscure it */
+      }
+      #submit-btn {
+        padding: 0.5em;
+      }
+      #user-input {
+        font-size: 0.95em;
+      }
     }
   </style>
 </head>
 <body>
 <div id="game-container">
-  <h2>BROADSIDE as Warhead — Extended Text RPG</h2>
+  <h2>BROADSIDE as Warhead — Responsive Text RPG</h2>
   <div id="output"></div>
   <div id="input-area">
     <input type="text" id="user-input" placeholder="Type a command..." autofocus />
@@ -74,7 +112,7 @@
 
 <script>
 ////////////////////////////////////////////////////////////////////////////////
-// GLOBAL GAME STATE
+// GAME STATE, ITEMS, LOCATIONS, etc.
 ////////////////////////////////////////////////////////////////////////////////
 const gameState = {
   introMode: true,
@@ -90,9 +128,6 @@ const gameState = {
   gameOver: false
 };
 
-////////////////////////////////////////////////////////////////////////////////
-// ITEMS
-////////////////////////////////////////////////////////////////////////////////
 const items = {
   oldPrinter: { 
     name: "oldPrinter",
@@ -136,11 +171,8 @@ const items = {
   }
 };
 
-////////////////////////////////////////////////////////////////////////////////
-// LOCATIONS WITH IMAGES
-////////////////////////////////////////////////////////////////////////////////
+// Scenes: Warhead's Home, VR Den, Jane's Townhouse, ShareCar, Checkpoint, Arena, etc.
 const locations = {
-  // 1) Warhead's Home
   warheadHome: {
     name: "Warhead's Home",
     desc: `
@@ -178,7 +210,6 @@ You can also visit your father in the VR Den if you wish, to see if he can help.
     }
   },
 
-  // 2) Dad's VR Den
   vrDen: {
     name: "Dad's VR Den",
     desc: `
@@ -206,7 +237,6 @@ Your father slumps in a worn-out chair, half-lost in some virtual realm.
     }
   },
 
-  // 3) Jane's Townhouse
   janeTownhouse: {
     name: "Jane's Townhouse",
     desc: `
@@ -232,7 +262,6 @@ Jane Stratton demands it be fixed quickly or no tip.
     }
   },
 
-  // 4) ShareCar
   shareCar: {
     name: "ShareCar",
     desc: `
@@ -266,7 +295,6 @@ There's a musicPlayer on the console. Next stop: the checkpoint.
     }
   },
 
-  // 5) Prota Checkpoint
   checkpoint: {
     name: "Prota Checkpoint",
     desc: `
@@ -292,7 +320,6 @@ One stares at you, expecting compliance.
     }
   },
 
-  // 6) Broadside Arena
   broadsideArena: {
     name: "Broadside Arena",
     desc: `
@@ -329,7 +356,6 @@ Rug Mob is here with top-tier gear. Carlos and Riz get suited up.
     }
   },
 
-  // 7) Darkest Hour (Night of Despair)
   darkestHour: {
     name: "Night of Despair",
     desc: `
@@ -358,14 +384,13 @@ This is your lowest point.
     }
   },
 
-  // 8) Slum Towers
   slumTowers: {
     name: "South SF Slum Towers",
     desc: `
 <img src="https://ibb.co/9mLn1s1Q" alt="South SF slum towers" class="scene-image"/>
 You lost the match. Carlos is furious, Riz is upset. Marshals roam these towers. 
 Zero hints at hacking Prota with something called 'Brute Force.'
-(Now you can move to a 'printFarm' if you discovered Brute Force, or go to bubbleKitchen.)
+(Now you can move to 'printFarm' if you discovered Brute Force, or go to bubbleKitchen.)
 `,
     items: [],
     npcs: [
@@ -394,7 +419,6 @@ Zero hints at hacking Prota with something called 'Brute Force.'
     }
   },
 
-  // 9) Print Farm (Hacked)
   printFarm: {
     name: "Hacked Print Farm",
     desc: `
@@ -421,7 +445,6 @@ including bonesuit upgrades and 'rave vehicles' to fight Marshals in style.
     }
   },
 
-  // 10) Bubble Kitchen
   bubbleKitchen: {
     name: "Bubble Kitchen",
     desc: `
@@ -455,7 +478,6 @@ A battered 3D printer hums in the corner.
     }
   },
 
-  // 11) Final Confrontation
   finalConfrontation: {
     name: "Prota HQ Rooftop",
     desc: `
@@ -483,7 +505,6 @@ A stealth drone spotlights you. SamKore appears on a holo-screen.
     }
   },
 
-  // 12) Epilogue (Return with the Elixir)
   epilogue: {
     name: "Epilogue",
     desc: `
@@ -514,7 +535,7 @@ You see kids printing toy vehicles or bonesuit parts, forging a new future.
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-// OUTPUT / INTRO
+// PRINT + INTRO
 ////////////////////////////////////////////////////////////////////////////////
 function print(text) {
   const outputEl = document.getElementById("output");
@@ -526,13 +547,13 @@ function showIntroScreen() {
   const outputEl = document.getElementById("output");
   outputEl.innerHTML = "";
   print("BSIDE 2037 - HYPER RPG\n");
-  // The main intro image (unchanged from previous code, you can alter if you like)
+  // Intro image from the previous version
   print("<img src='https://cdn.discordapp.com/attachments/1342947321557680260/1344875088083947632/IMG_4759.jpg' alt='Broadside Intro Image' class='intro-image'/>");
   print("\nType 'start' to begin the game, or 'help' for info.");
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// SHOW LOCATION
+// RENDER LOCATION
 ////////////////////////////////////////////////////////////////////////////////
 function showLocation(locationKey) {
   const loc = locations[locationKey];
@@ -599,13 +620,11 @@ function tryMove(targetLocation) {
     print("Game is over, can't move.");
     return;
   }
-
   const currentLocObj = locations[gameState.currentLocation];
   if (!currentLocObj.exits || !currentLocObj.exits.move) {
     print(`You can't go to '${targetLocation}' from here.`);
     return;
   }
-
   const exitsObj = currentLocObj.exits.move;
   const normTarget = Object.keys(exitsObj).find(
     k => k.toLowerCase() === targetLocation.toLowerCase()
@@ -633,13 +652,11 @@ function talkTo(npcName) {
   const line = npc.talk[Math.floor(Math.random() * npc.talk.length)];
   print(`${npc.name} says: "${line}"`);
 
-  // If Zero => grant bruteForce
   if (npc.name.toLowerCase() === "zero" && !gameState.inventory.includes("bruteForce")) {
     print("Zero hands you the 'bruteForce' script!");
     gameState.inventory.push("bruteForce");
   }
 
-  // If Marshal at checkpoint => user shows ID
   if (npc.name.toLowerCase() === "marshal" && gameState.currentLocation === "checkpoint") {
     print("You begrudgingly show your ID. The Marshal steps aside.");
   }
@@ -717,7 +734,6 @@ function useItem(itemName) {
   const hasItem = invIndex !== -1;
 
   if (!hasItem) {
-    // Could be location-bound item (musicPlayer)
     const loc = locations[gameState.currentLocation];
     const locIndex = loc.items.findIndex(
       i => i.toLowerCase() === itemName.toLowerCase()
@@ -735,7 +751,6 @@ function useItem(itemName) {
     return;
   }
 
-  // We do have the item
   const realItem = gameState.inventory[invIndex];
   switch (realItem) {
     case "printerManual":
@@ -770,7 +785,6 @@ function hackTarget(target) {
   }
   const loc = locations[gameState.currentLocation];
 
-  // Hack Marshal at checkpoint => ARREST => game over
   if (target === "marshal" && gameState.currentLocation === "checkpoint") {
     print("You attempt to hack the Marshal, it detects you instantly...");
     print("Alarms blare! Marshals swarm in. You're arrested, never seen again.");
@@ -779,7 +793,6 @@ function hackTarget(target) {
     return;
   }
 
-  // hack 3D1 in JaneTownhouse
   if (target === "3d1" && gameState.currentLocation === "janeTownhouse") {
     if (!gameState.hasPrinterCode) {
       print("No success. You might need the admin code first.");
@@ -791,7 +804,6 @@ function hackTarget(target) {
     return;
   }
 
-  // hack oldPrinter at warheadHome
   if (target === "oldprinter" && gameState.currentLocation === "warheadHome") {
     print("You tinker with the broken printer...");
     if (!loc.items.includes("jammedFilament") &&
@@ -804,7 +816,6 @@ function hackTarget(target) {
     return;
   }
 
-  // hack Marshal at finalConfrontation
   if (target === "marshal" && gameState.currentLocation === "finalConfrontation") {
     print("You attempt to hack the advanced Marshals...");
     if (gameState.inventory.includes("bruteForce") && !gameState.revolutionStarted) {
@@ -816,7 +827,6 @@ function hackTarget(target) {
     return;
   }
 
-  // hack prota hq => final revolution
   if (target === "prota hq" && gameState.currentLocation === "finalConfrontation") {
     if (gameState.inventory.includes("bruteForce") && !gameState.revolutionStarted) {
       print("You unleash Brute Force on Prota's core systems, disabling Marshals en masse!");
@@ -824,7 +834,7 @@ function hackTarget(target) {
       gameState.revolutionStarted = true;
       gameState.finalOutcome = "revolution";
       print("YOU HAVE STARTED A REVOLUTION!\n");
-      // final image
+      // final victory image
       print("<img src='https://cdn.discordapp.com/attachments/1342947321557680260/1344875088083947632/IMG_4759.jpg' alt='Broadside Victory Image' class='victory-image'/>");
       print("NONE OF THEM ARE AS STRONG AS ALL OF US");
     } else {
@@ -833,7 +843,6 @@ function hackTarget(target) {
     return;
   }
 
-  // hack bruteforce => not valid
   if (target === "bruteforce") {
     print("You open the script. It's not hackable itself; use it on something else!");
     return;
@@ -843,7 +852,7 @@ function hackTarget(target) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// INTRO + MAIN LOOP
+// INIT GAME + EVENT LISTENERS
 ////////////////////////////////////////////////////////////////////////////////
 function initGame() {
   showIntroScreen();
@@ -932,7 +941,6 @@ function handleInput(input) {
   }
 }
 
-// Start
 document.getElementById("submit-btn").addEventListener("click", function() {
   const userInput = document.getElementById("user-input");
   const text = userInput.value;
