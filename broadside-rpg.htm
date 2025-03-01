@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>BROADSIDE as Warhead: Extended Text RPG (Location Images)</title>
+  <title>BROADSIDE as Warhead — Extended Text RPG (All Images Added)</title>
   <style>
     body {
       background: #222;
@@ -52,15 +52,11 @@
     #submit-btn:hover {
       background: #666;
     }
-    .intro-image, .victory-image {
-      margin-top: 1em;
-      max-width: 100%;
-      border: 2px solid #fff;
-    }
-    /* A style for location images in each location desc */
-    .scene-image {
+    .scene-image,
+    .intro-image,
+    .victory-image {
       display: block;
-      margin-top: 0.5em;
+      margin-top: 1em;
       max-width: 100%;
       border: 2px solid #fff;
     }
@@ -77,20 +73,9 @@
 </div>
 
 <script>
-/*
-  BROADSIDE as Warhead - Extended Text RPG
-  ----------------------------------------
-  - Each location now includes an <img> tag in its desc, 
-    using your provided Discord links.
-
-  - Intro screen & final victory remain the same (with the main image).
-  - The rest of the code is identical to before, 
-    except each location now references a unique image.
-*/
-
-// ---------------------------
+////////////////////////////////////////////////////////////////////////////////
 // GLOBAL GAME STATE
-// ---------------------------
+////////////////////////////////////////////////////////////////////////////////
 const gameState = {
   introMode: true,
   currentLocation: "warheadHome",
@@ -105,57 +90,66 @@ const gameState = {
   gameOver: false
 };
 
-// ---------------------------
-// ITEM DATA
-// ---------------------------
+////////////////////////////////////////////////////////////////////////////////
+// ITEMS
+////////////////////////////////////////////////////////////////////////////////
 const items = {
-  oldPrinter: {
+  oldPrinter: { 
     name: "oldPrinter",
-    desc: "An ancient 3D printer in Warhead's home."
+    desc: "An ancient 3D printer at Warhead's home."
   },
-  jammedFilament: {
+  jammedFilament: { 
     name: "jammedFilament",
-    desc: "A burnt lump of plastic from a 3D printer jam."
+    desc: "A burnt lump of plastic from a jammed 3D printer."
   },
-  backdoorCode: {
+  backdoorCode: { 
     name: "backdoorCode",
     desc: "A slip with '3D1-FAZE-999' password."
   },
-  warheadBonesuit: {
+  warheadBonesuit: { 
     name: "warheadBonesuit",
     desc: "Warhead's battered junior league suit."
   },
-  printerManual: {
+  printerManual: { 
     name: "printerManual",
     desc: "Prota 3D1 manual, possibly with secrets."
   },
-  bubbleTea: {
+  bubbleTea: { 
     name: "bubbleTea",
     desc: "A refreshing drink from Bubble Kitchen."
   },
-  bruteForce: {
+  bruteForce: { 
     name: "bruteForce",
     desc: "A hacking script by Warhead's father."
   },
   musicPlayer: {
     name: "musicPlayer",
     desc: "A built-in ShareCar audio system."
+  },
+  raveVehicle: {
+    name: "raveVehicle",
+    desc: "A neon 'rave tank' or modded 3D-printed car."
+  },
+  bonesuitUpgrade: {
+    name: "bonesuitUpgrade",
+    desc: "Advanced plating for unstoppable bonesuits."
   }
 };
 
-// ---------------------------
-// LOCATIONS
-// Each desc includes an <img> tag with the .scene-image class
-// referencing your Discord image links
-// ---------------------------
+////////////////////////////////////////////////////////////////////////////////
+// LOCATIONS WITH IMAGES
+////////////////////////////////////////////////////////////////////////////////
 const locations = {
+  // 1) Warhead's Home
   warheadHome: {
     name: "Warhead's Home",
     desc: `
-<img src="https://cdn.discordapp.com/attachments/1342947321557680260/1344888327689732178/image0.jpg?ex=67c28c5c&is=67c13adc&hm=e7db2d8a385a604d289b025f2d4009f53e058dfd21eefb1132d8f4643c89def6&"
-     alt="Warhead's home" class="scene-image"/>
+<img src="https://ibb.co/YF0fxVYc" alt="Warhead's apartment" class="scene-image"/>
 A cramped apartment with an old 3D printer in the corner. 
 Carlos and Riz worry about rent and the upcoming match.
+
+You can also visit your father in the VR Den if you wish, to see if he can help...
+(try: move vrDen)
 `,
     items: ["oldPrinter"],
     npcs: [
@@ -171,25 +165,54 @@ Carlos and Riz worry about rent and the upcoming match.
         name: "Riz",
         desc: "A close friend who also plays Broadside.",
         talk: [
-          "'Senior league is tough, Warhead, but let's try.'",
-          "'I won't touch that old printer, I'd break it more.'"
+          "'Senior league is tough, Warhead, but let's try anyway.'",
+          "'I won't touch that old printer, I'd break it.'"
         ]
       }
     ],
     exits: {
       move: {
+        vrDen: "vrDen",
         townhouse: "janeTownhouse"
       }
     }
   },
 
+  // 2) Dad's VR Den
+  vrDen: {
+    name: "Dad's VR Den",
+    desc: `
+<img src="https://ibb.co/G4f9Z50D" alt="Dad's VR Den" class="scene-image"/>
+You enter a dark corner of the apartment building, where your father 
+spends most of his time logged into the metaverse. 
+Neon lights flicker from the battered VR rig. 
+Your father slumps in a worn-out chair, half-lost in some virtual realm.
+`,
+    items: [],
+    npcs: [
+      {
+        name: "Father",
+        desc: "Warhead's father, half-awake, muttering about old code.",
+        talk: [
+          "'Mmm... War... Warhead? The code... I made it back in '29... bzz...'",
+          "'Brute Force... it can open any system, any printer. Just... be careful...' (He drifts away)"
+        ]
+      }
+    ],
+    exits: {
+      move: {
+        warheadHome: "warheadHome"
+      }
+    }
+  },
+
+  // 3) Jane's Townhouse
   janeTownhouse: {
     name: "Jane's Townhouse",
     desc: `
-<img src="https://media.discordapp.net/attachments/1342947321557680260/1344888433277010062/image0.jpg?ex=67c28c75&is=67c13af5&hm=0cda4cb0de5a711430979c39272f71e48f2d6fee7d7895d5cced7809d1db73ff&"
-     alt="Jane's apartment" class="scene-image"/>
+<img src="https://ibb.co/NnGrHqPk" alt="Jane's apartment" class="scene-image"/>
 An ultra-modern home with a giant Prota 3D1. 
-Jane Stratton demands it be fixed.
+Jane Stratton demands it be fixed quickly or no tip.
 `,
     items: ["printerManual"],
     npcs: [
@@ -209,11 +232,11 @@ Jane Stratton demands it be fixed.
     }
   },
 
+  // 4) ShareCar
   shareCar: {
     name: "ShareCar",
     desc: `
-<img src="https://media.discordapp.net/attachments/1342947321557680260/1344888551275233392/image0.jpg?ex=67c28c91&is=67c13b11&hm=3bf65acd174e135ebc99dcf9bb30a5048ddb9456d6e381ef2903b048f086082e&"
-     alt="ShareCar" class="scene-image"/>
+<img src="https://ibb.co/R4bWWMVZ" alt="ShareCar" class="scene-image"/>
 A dingy self-driving pod. Carlos and Riz wave you in. 
 There's a musicPlayer on the console. Next stop: the checkpoint.
 `,
@@ -221,10 +244,10 @@ There's a musicPlayer on the console. Next stop: the checkpoint.
     npcs: [
       {
         name: "Carlos",
-        desc: "Checking gear for the senior match.",
+        desc: "He’s checking gear for the senior match.",
         talk: [
           "'Hope you fixed that printer. We need the money.'",
-          "'We gotta hurry or we'll be late.'"
+          "'We gotta hurry or we'll be late to the match.'"
         ]
       },
       {
@@ -232,7 +255,7 @@ There's a musicPlayer on the console. Next stop: the checkpoint.
         desc: "Quietly scrolling LuminOS.",
         talk: [
           "'You see the new NFT armor Rug Mob has? It's insane.'",
-          "'Don't anger the Marshals at the checkpoint, Warhead. We can't afford that.'"
+          "'Don't anger the Marshals at the checkpoint, Warhead.'"
         ]
       }
     ],
@@ -243,11 +266,11 @@ There's a musicPlayer on the console. Next stop: the checkpoint.
     }
   },
 
+  // 5) Prota Checkpoint
   checkpoint: {
     name: "Prota Checkpoint",
     desc: `
-<img src="https://media.discordapp.net/attachments/1342947321557680260/1344891563624632330/image0.jpg?ex=67c28f5f&is=67c13ddf&hm=3e0a291173c1acc3b1a0a573fd3bf3293b6fa484bd1243d4a2f794e0c2c3cadc&"
-     alt="Prota checkpoint" class="scene-image"/>
+<img src="https://ibb.co/TDVVC1Pf" alt="Prota checkpoint" class="scene-image"/>
 A fortified arch. Marshals scan for unauthorized gear. 
 One stares at you, expecting compliance.
 `,
@@ -269,13 +292,15 @@ One stares at you, expecting compliance.
     }
   },
 
+  // 6) Broadside Arena
   broadsideArena: {
     name: "Broadside Arena",
     desc: `
-<img src="https://media.discordapp.net/attachments/1342947321557680260/1344896342677393439/image0.jpg?ex=67c293d3&is=67c14253&hm=b96eb5e93066819095ded2a99cde183fa88224f099ebd8a393f2c3903af9caab&"
-     alt="Broadside arena" class="scene-image"/>
+<img src="https://ibb.co/cBk174z" alt="Broadside arena" class="scene-image"/>
 A repurposed warehouse for the senior league. 
 Rug Mob is here with top-tier gear. Carlos and Riz get suited up.
+
+(After losing here, you can move to 'darkestHour' to see Warhead at a low point.)
 `,
     items: [],
     npcs: [
@@ -298,18 +323,49 @@ Rug Mob is here with top-tier gear. Carlos and Riz get suited up.
     ],
     exits: {
       move: {
+        darkestHour: "darkestHour",
         slumTowers: "slumTowers"
       }
     }
   },
 
+  // 7) Darkest Hour (Night of Despair)
+  darkestHour: {
+    name: "Night of Despair",
+    desc: `
+<img src="https://ibb.co/45f1MJW" alt="Darkest Hour" class="scene-image"/>
+You wander through a desolate side street, neon reflections in puddles. 
+Your team lost. Marshals lurk around the corner. 
+You feel there's no way out—Prota seems invincible.
+
+Carlos is nowhere to be found. Riz might be hurt. 
+This is your lowest point.
+`,
+    items: [],
+    npcs: [
+      {
+        name: "Warhead",
+        desc: "You, at your absolute low. Internal monologue only.",
+        talk: [
+          "(You mutter) 'We've lost everything... the system's rigged... maybe Dad's code is our only chance...'"
+        ]
+      }
+    ],
+    exits: {
+      move: {
+        slumTowers: "slumTowers"
+      }
+    }
+  },
+
+  // 8) Slum Towers
   slumTowers: {
     name: "South SF Slum Towers",
     desc: `
-<img src="https://media.discordapp.net/attachments/1342947321557680260/1344893849792811040/image0.jpg?ex=67c29180&is=67c14000&hm=03ca52f90b8e0aa0aff5f7d8ae26de07b79f9d9ec33e89b7d3aeefd6cf0612d6&"
-     alt="South SF slum towers" class="scene-image"/>
-You lost the match. Carlos is furious, Riz is upset. 
-Marshals roam these towers. Zero hints at hacking Prota.
+<img src="https://ibb.co/9mLn1s1Q" alt="South SF slum towers" class="scene-image"/>
+You lost the match. Carlos is furious, Riz is upset. Marshals roam these towers. 
+Zero hints at hacking Prota with something called 'Brute Force.'
+(Now you can move to a 'printFarm' if you discovered Brute Force, or go to bubbleKitchen.)
 `,
     items: [],
     npcs: [
@@ -318,7 +374,7 @@ Marshals roam these towers. Zero hints at hacking Prota.
         desc: "Shaken by the defeat.",
         talk: [
           "'Rug Mob hammered us. They had insane gear.'",
-          "'We might need a hack to fight Prota's advantage...'"
+          "'We might need a hack to fight Prota's advantage... Brute Force, maybe?'"
         ]
       },
       {
@@ -326,7 +382,35 @@ Marshals roam these towers. Zero hints at hacking Prota.
         desc: "A dreadlocked activist who despises Prota.",
         talk: [
           "'Heard you got burned. The system is rigged, kid.'",
-          "'A hack called Brute Force might help. Your father was involved.'"
+          "'Brute Force is real. If your father wrote it, maybe you can finish it.'"
+        ]
+      }
+    ],
+    exits: {
+      move: {
+        printFarm: "printFarm",
+        bubbleKitchen: "bubbleKitchen"
+      }
+    }
+  },
+
+  // 9) Print Farm (Hacked)
+  printFarm: {
+    name: "Hacked Print Farm",
+    desc: `
+<img src="https://ibb.co/1CY55VM" alt="Broadsiders Hacked Print Farm" class="scene-image"/>
+A hidden warehouse full of advanced 3D printers, seized or salvaged by rebels. 
+Now that you have Brute Force, you can print anything— 
+including bonesuit upgrades and 'rave vehicles' to fight Marshals in style.
+`,
+    items: [],
+    npcs: [
+      {
+        name: "TechEngineer",
+        desc: "An activist engineer overseeing the print jobs.",
+        talk: [
+          "'Finally, with your hack, we can print unstoppable gear.'",
+          "'We're making 'rave vehicles'—like mobile disco tanks for infiltration.'"
         ]
       }
     ],
@@ -337,13 +421,13 @@ Marshals roam these towers. Zero hints at hacking Prota.
     }
   },
 
+  // 10) Bubble Kitchen
   bubbleKitchen: {
     name: "Bubble Kitchen",
     desc: `
-<img src="https://media.discordapp.net/attachments/1342947321557680260/1344892128794251285/image0.jpg?ex=67c28fe6&is=67c13e66&hm=01925cbd9a5335f8270d1f941b1ca2ea6d2960e6975d28e3e0162d7cded45a62&"
-     alt="Bubble kitchen" class="scene-image"/>
-A neon-lit fast-food joint. Koth and Omar hang here, 
-the smell of vat-grown chicken is strong. A battered 3D printer hums in the corner.
+<img src="https://ibb.co/m5Q07zNc" alt="Bubble Kitchen" class="scene-image"/>
+A neon-lit fast-food joint. Koth and Omar linger, the smell of vat-grown chicken thick. 
+A battered 3D printer hums in the corner.
 `,
     items: ["bubbleTea"],
     npcs: [
@@ -371,13 +455,15 @@ the smell of vat-grown chicken is strong. A battered 3D printer hums in the corn
     }
   },
 
+  // 11) Final Confrontation
   finalConfrontation: {
     name: "Prota HQ Rooftop",
     desc: `
-<img src="https://media.discordapp.net/attachments/1342947321557680260/1344895229123235942/image0.jpg?ex=67c292c9&is=67c14149&hm=0af4c66e4eecaa031e6baac1d34d75431b8c5945765a32e2ec1fa57e6a4da74d&"
-     alt="Prota HQ rooftop" class="scene-image"/>
+<img src="https://ibb.co/qLg3XSsP" alt="Prota HQ rooftop" class="scene-image"/>
 The glass pyramid of Prota HQ. Marshals swarm. 
 A stealth drone spotlights you. SamKore appears on a holo-screen.
+
+(After you hack prota hq, consider moving epilogue to see the aftermath.)
 `,
     items: [],
     npcs: [
@@ -392,13 +478,44 @@ A stealth drone spotlights you. SamKore appears on a holo-screen.
     ],
     exits: {
       move: {
-        // final area
+        epilogue: "epilogue"
+      }
+    }
+  },
+
+  // 12) Epilogue (Return with the Elixir)
+  epilogue: {
+    name: "Epilogue",
+    desc: `
+<img src="https://ibb.co/chfQfcm" alt="Cyberpunk Epilogue" class="scene-image"/>
+Marshals have been disabled, Prota’s hold broken. 
+All across the city, people celebrate free 3D printing. 
+Slum Towers can finally produce crucial goods—medicine, bonesuits, water filters.
+
+You see kids printing toy vehicles or bonesuit parts, forging a new future.
+`,
+    items: [],
+    npcs: [
+      {
+        name: "StreetKid",
+        desc: "A wide-eyed kid printing a new world.",
+        talk: [
+          "'You did it, Warhead! We can print anything now. Thank you!'",
+          "'No more Prota lockouts, thanks to Brute Force.'"
+        ]
+      }
+    ],
+    exits: {
+      move: {
+        // end
       }
     }
   }
 };
 
-// Output, Intro, etc.
+////////////////////////////////////////////////////////////////////////////////
+// OUTPUT / INTRO
+////////////////////////////////////////////////////////////////////////////////
 function print(text) {
   const outputEl = document.getElementById("output");
   outputEl.innerHTML += text + "\n";
@@ -409,11 +526,14 @@ function showIntroScreen() {
   const outputEl = document.getElementById("output");
   outputEl.innerHTML = "";
   print("BSIDE 2037 - HYPER RPG\n");
-  // The main intro image link
-  print("<img src='https://cdn.discordapp.com/attachments/1342947321557680260/1344875088083947632/IMG_4759.jpg?ex=67c28007&is=67c12e87&hm=b662724ce2e821340c60752425df4b8be152010feec569c09cbb4536f678467c&' alt='Broadside Intro Image' class='intro-image'/>");
+  // The main intro image (unchanged from previous code, you can alter if you like)
+  print("<img src='https://cdn.discordapp.com/attachments/1342947321557680260/1344875088083947632/IMG_4759.jpg' alt='Broadside Intro Image' class='intro-image'/>");
   print("\nType 'start' to begin the game, or 'help' for info.");
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// SHOW LOCATION
+////////////////////////////////////////////////////////////////////////////////
 function showLocation(locationKey) {
   const loc = locations[locationKey];
   print(`\n== ${loc.name} ==\n`);
@@ -434,12 +554,12 @@ function showActions(locationKey) {
   const loc = locations[locationKey];
   let actions = [];
 
-  loc.npcs.forEach(n => actions.push(`talk ${n.name.toLowerCase()}`));
-  loc.items.forEach(i => actions.push(`take ${i}`));
+  loc.npcs.forEach(npc => actions.push(`talk ${npc.name.toLowerCase()}`));
+  loc.items.forEach(itemName => actions.push(`take ${itemName}`));
 
   if (loc.exits && loc.exits.move) {
-    for (const dest in loc.exits.move) {
-      actions.push(`move ${dest}`);
+    for (const destination in loc.exits.move) {
+      actions.push(`move ${destination}`);
     }
   }
 
@@ -452,13 +572,14 @@ function showActions(locationKey) {
   print(`\nAvailable actions: ${actions.join(", ")}`);
 }
 
-// Basic commands
+////////////////////////////////////////////////////////////////////////////////
+// BASIC COMMANDS
+////////////////////////////////////////////////////////////////////////////////
 function lookAround() {
   if (gameState.gameOver) {
     print("You can't do that. The game is over.");
     return;
   }
-
   const loc = locations[gameState.currentLocation];
   let msg = "";
   if (loc.items.length > 0) {
@@ -479,15 +600,15 @@ function tryMove(targetLocation) {
     return;
   }
 
-  const currentLoc = locations[gameState.currentLocation];
-  if (!currentLoc.exits || !currentLoc.exits.move) {
+  const currentLocObj = locations[gameState.currentLocation];
+  if (!currentLocObj.exits || !currentLocObj.exits.move) {
     print(`You can't go to '${targetLocation}' from here.`);
     return;
   }
 
-  const exitsObj = currentLoc.exits.move;
+  const exitsObj = currentLocObj.exits.move;
   const normTarget = Object.keys(exitsObj).find(
-    key => key.toLowerCase() === targetLocation.toLowerCase()
+    k => k.toLowerCase() === targetLocation.toLowerCase()
   );
   if (!normTarget) {
     print(`You can't go to '${targetLocation}' from here.`);
@@ -503,18 +624,16 @@ function talkTo(npcName) {
     print("Game is over, can't talk.");
     return;
   }
-
   const loc = locations[gameState.currentLocation];
   const npc = loc.npcs.find(n => n.name.toLowerCase() === npcName.toLowerCase());
   if (!npc) {
     print(`No one named '${npcName}' here.`);
     return;
   }
-
   const line = npc.talk[Math.floor(Math.random() * npc.talk.length)];
   print(`${npc.name} says: "${line}"`);
 
-  // If Zero -> grant bruteForce
+  // If Zero => grant bruteForce
   if (npc.name.toLowerCase() === "zero" && !gameState.inventory.includes("bruteForce")) {
     print("Zero hands you the 'bruteForce' script!");
     gameState.inventory.push("bruteForce");
@@ -531,20 +650,17 @@ function takeItem(itemName) {
     print("Game over, can't take items.");
     return;
   }
-
   const loc = locations[gameState.currentLocation];
   const idx = loc.items.findIndex(i => i.toLowerCase() === itemName.toLowerCase());
   if (idx === -1) {
     print(`No item '${itemName}' here to take.`);
     return;
   }
-
   const realItem = loc.items[idx];
   if (realItem === "musicPlayer") {
     print("It's built into the ShareCar; you can't take it.");
     return;
   }
-
   loc.items.splice(idx, 1);
   gameState.inventory.push(realItem);
   print(`You pick up the ${realItem}.`);
@@ -555,7 +671,6 @@ function showInventory() {
     print("GAME OVER. Inventory doesn't matter now.");
     return;
   }
-
   if (gameState.inventory.length === 0) {
     print("You have no items.");
   } else {
@@ -568,12 +683,10 @@ function showHelp() {
     print("GAME OVER. Refresh to restart.");
     return;
   }
-
   if (gameState.introMode) {
     print("Type 'start' to begin the game or refresh to reload the intro.");
     return;
   }
-
   print(`Commands:
 - start (only valid on intro screen)
 - look
@@ -586,25 +699,30 @@ function showHelp() {
 - help
 
 Items that might appear: oldPrinter, jammedFilament, backdoorCode, warheadBonesuit,
-printerManual, bubbleTea, bruteForce, musicPlayer
+printerManual, bubbleTea, bruteForce, musicPlayer, bonesuitUpgrade, raveVehicle
 `);
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// USE COMMAND
+////////////////////////////////////////////////////////////////////////////////
 function useItem(itemName) {
   if (gameState.gameOver) {
     print("Game over, can't use items.");
     return;
   }
-
-  const invIndex = gameState.inventory.findIndex(i => i.toLowerCase() === itemName.toLowerCase());
+  const invIndex = gameState.inventory.findIndex(
+    i => i.toLowerCase() === itemName.toLowerCase()
+  );
   const hasItem = invIndex !== -1;
 
   if (!hasItem) {
-    // Maybe location-bound item
+    // Could be location-bound item (musicPlayer)
     const loc = locations[gameState.currentLocation];
-    const locIndex = loc.items.findIndex(i => i.toLowerCase() === itemName.toLowerCase());
+    const locIndex = loc.items.findIndex(
+      i => i.toLowerCase() === itemName.toLowerCase()
+    );
     if (locIndex !== -1 && loc.items[locIndex] === "musicPlayer") {
-      // shareCar music player
       if (gameState.currentLocation === "shareCar") {
         print("You tap the music player. A jungle beat blasts from the speakers!");
         print("Carlos and Riz nod along to the rhythm.");
@@ -613,12 +731,11 @@ function useItem(itemName) {
       }
       return;
     }
-
     print(`You don't have '${itemName}' and it's not usable here.`);
     return;
   }
 
-  // Found item in inventory
+  // We do have the item
   const realItem = gameState.inventory[invIndex];
   switch (realItem) {
     case "printerManual":
@@ -643,12 +760,14 @@ function useItem(itemName) {
   }
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// HACK COMMAND
+////////////////////////////////////////////////////////////////////////////////
 function hackTarget(target) {
   if (gameState.gameOver) {
     print("Game is over, can't hack now.");
     return;
   }
-
   const loc = locations[gameState.currentLocation];
 
   // Hack Marshal at checkpoint => ARREST => game over
@@ -660,7 +779,7 @@ function hackTarget(target) {
     return;
   }
 
-  // hack 3d1 at JaneTownhouse
+  // hack 3D1 in JaneTownhouse
   if (target === "3d1" && gameState.currentLocation === "janeTownhouse") {
     if (!gameState.hasPrinterCode) {
       print("No success. You might need the admin code first.");
@@ -697,7 +816,7 @@ function hackTarget(target) {
     return;
   }
 
-  // hack prota hq => victory
+  // hack prota hq => final revolution
   if (target === "prota hq" && gameState.currentLocation === "finalConfrontation") {
     if (gameState.inventory.includes("bruteForce") && !gameState.revolutionStarted) {
       print("You unleash Brute Force on Prota's core systems, disabling Marshals en masse!");
@@ -705,8 +824,8 @@ function hackTarget(target) {
       gameState.revolutionStarted = true;
       gameState.finalOutcome = "revolution";
       print("YOU HAVE STARTED A REVOLUTION!\n");
-      // Display final image + message
-      print("<img src='https://cdn.discordapp.com/attachments/1342947321557680260/1344875088083947632/IMG_4759.jpg?ex=67c28007&is=67c12e87&hm=b662724ce2e821340c60752425df4b8be152010feec569c09cbb4536f678467c&' alt='Broadside Victory Image' class='victory-image'/>");
+      // final image
+      print("<img src='https://cdn.discordapp.com/attachments/1342947321557680260/1344875088083947632/IMG_4759.jpg' alt='Broadside Victory Image' class='victory-image'/>");
       print("NONE OF THEM ARE AS STRONG AS ALL OF US");
     } else {
       print("You either lack 'bruteForce' or you've already triggered the revolution.");
@@ -723,7 +842,9 @@ function hackTarget(target) {
   print(`Hacking '${target}' is not recognized or not possible here.`);
 }
 
-// Intro + Start
+////////////////////////////////////////////////////////////////////////////////
+// INTRO + MAIN LOOP
+////////////////////////////////////////////////////////////////////////////////
 function initGame() {
   showIntroScreen();
 }
@@ -732,7 +853,6 @@ function handleInput(input) {
   const raw = input.trim();
   if (!raw) return;
 
-  // intro mode
   if (gameState.introMode) {
     const lower = raw.toLowerCase();
     if (lower === "start") {
@@ -747,7 +867,6 @@ function handleInput(input) {
     return;
   }
 
-  // game over
   if (gameState.gameOver) {
     if (raw.toLowerCase() === "help") {
       showHelp();
@@ -757,14 +876,15 @@ function handleInput(input) {
     return;
   }
 
-  // normal gameplay
   print("> " + raw);
   const lower = raw.toLowerCase();
   const words = lower.split(" ");
   const cmd = words[0];
 
   switch (cmd) {
-    case "look": lookAround(); break;
+    case "look":
+      lookAround();
+      break;
     case "move":
       if (words.length < 2) {
         print("Move where?");
